@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS + CSS Clock</title>
+</head>
+<body>
+
+
+    <div class="clock">
+      <div class="clock-face">
+        <div class="hand hour-hand"></div>
+        <div class="hand min-hand"></div>
+        <div class="hand second-hand"></div>
+      </div>
+    </div>
+
+
+  <style>
+    html {
+      background: #018DED url(http://unsplash.it/1500/1000?image=881&blur=50);
+      background-size: cover;
+      font-family: 'helvetica neue';
+      text-align: center;
+      font-size: 10px;
+    }
+
+    body {
+      margin: 0;
+      font-size: 2rem;
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .clock {
+      width: 30rem;
+      height: 30rem;
+      border: 20px solid white;
+      border-radius: 50%;
+      margin: 50px auto;
+      position: relative;
+      padding: 2rem;
+      box-shadow:
+        0 0 0 4px rgba(0,0,0,0.1),
+        inset 0 0 0 3px #EFEFEF,
+        inset 0 0 10px black,
+        0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .clock-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform: translateY(-3px); /* account for the height of the clock hands */
+    }
+
+    .hand {
+      width: 50%;
+      height: 6px;
+      background: black;
+      position: absolute;
+      top: 50%;
+      transform-origin: right;
+    }
+
+    .hour-hand{
+    	transition: transform 1s;
+    }
+
+    .min-hand{
+    	transition: transform 1s;
+    }
+
+    .second-hand{
+    	transition: transform 1s;
+    }
+
+  </style>
+
+  <script>
+  	const date = new Date();
+  	const sec = document.querySelector(".second-hand");
+  	const min = document.querySelector(".min-hand");
+  	const hour = document.querySelector(".hour-hand");
+
+    let secCount = date.getSeconds();
+    let minCount = date.getMinutes();
+    let hourCount = date.getHours();
+
+    let secOffset = secCount * 6 + 90;
+    let minOffset = minCount * 6 + 90;
+    let hourOffset = hourCount * 15 + 90;
+
+  	sec.style.transform = "rotate("+ secOffset +"deg)";
+ 	  min.style.transform = "rotate("+ minOffset +"deg)";
+ 	  hour.style.transform = "rotate("+ hourOffset +"deg)";
+
+    let secCountString;
+    let minCountString;
+    let hourCountString;
+
+    function clock(){
+      setTimeout(function(){
+        secCount++;
+        secOffset += 6;
+        sec.style.transform = "rotate("+ secOffset +"deg)";
+        if(secCount == 60){
+          secCount = 0;
+          minCount++;
+          minOffset += 6;
+          min.style.transform = "rotate("+ minOffset +"deg)";
+        }
+        if(minCount == 60){
+          minCount = 0;
+          hourCount++;
+          hourOffset += 15;
+          hour.style.transform = "rotate("+ hourOffset +"deg)";
+        }
+        if(hourCount == 24){
+          hourCount = 0;
+        }
+      
+        hourCountString = hourCount;
+        minCountString = minCount;
+        secCountString = secCount;
+        if(hourCount < 10) hourCountString = "0" + hourCount;
+        if(minCount < 10) minCountString = "0" + minCount;
+        if(secCount < 10) secCountString = "0" + secCount;
+        console.log(hourCountString + ":" + minCountString + ":" + secCountString);
+        
+        clock();
+      }, 1000);
+    }
+
+    clock();
+
+  </script>
+</body>
+</html>
